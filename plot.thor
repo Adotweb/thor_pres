@@ -34,11 +34,13 @@ while(true){
 				[plot_point[0] + 1, plot_point[1] + 1]
 			]);
 		}
+	} else {
+			
+			
+		print "done plotting";
 	}
 
-	if(unit > screen_size[0]){
-		return nil;
-	}
+
 
 	unit = unit + 1;
 
@@ -68,7 +70,6 @@ while(true){
 	m.new_frame();
 }
 
-print "done plotting";
 
 while(true){
 
