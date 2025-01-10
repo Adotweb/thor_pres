@@ -62,7 +62,7 @@ while(true){
 
 	let clip_p  = [
 		norm(x, x_min, x_max, screen_size[0]),
-		norm(z, y_min, y_max, screen_size[1]) - screen_size[1]/2
+		screen_size[1] - norm(z, y_min, y_max, screen_size[1]) + screen_size[1]/2
 	];
 
 	m.draw_rect([
