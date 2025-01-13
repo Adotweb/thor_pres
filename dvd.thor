@@ -15,6 +15,7 @@ let rect_pos = [0, 0];
 let direction = 1;
 let direction_y = 1;
 
+
 while(true){
 		
 	//get time since last frame
@@ -23,13 +24,15 @@ while(true){
 
 
 	//draw rectangle with top left and bottom right corner
+
+
+	m.set_color([0, 0, 255]);
 	m.draw_rect([
 		[rect_pos[0], rect_pos[1]],
 		[rect_pos[0] + 200, rect_pos[1] + 200]
 	]);
 
-
-	print "" + screen_size[0] + " " + rect_pos[0];
+	print rect_pos;
 
 	//update the position of the rectangle
 	rect_pos[0] = rect_pos[0] + 500 * delta * direction;

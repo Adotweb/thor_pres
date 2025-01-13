@@ -6,8 +6,9 @@ overload + (a, b){
 	return stringify(a) + stringify(b);
 }
 
-m.create_window();
+let window = m.create_window();
 
+print window;
 
 let unit = 0;
 
@@ -37,11 +38,10 @@ let sigma = 10;
 let rho = 28;
 let beta = 8/3;
 
-print m;
 
 
 let color = [255, 0, 0];
-m.set_color(color);
+window.set_color(color);
 let last_point = [x, y];
 
 
@@ -57,7 +57,7 @@ while(true){
 		
 
 	//get time since last frame
-	let delta = m.get_delta_time();
+	let delta = window.get_delta_time();
 
 
 	let w = screen_size[0];
@@ -102,16 +102,16 @@ while(true){
 
 	
 
-	m.set_color(color);
-	m.draw_line([
+	window.set_color(color);
+	window.draw_line([
 		last_point, 
 		clip_p
 	]);
 	last_point = clip_p;
 
 
-	m.set_color(color2);
-	m.draw_line([
+	window.set_color(color2);
+	window.draw_line([
 		last_point2, 
 		clip_p2
 	]);
@@ -120,7 +120,7 @@ while(true){
 
 
 
-	let new_screen_size = m.get_screen_dimensions();
+	let new_screen_size = window.get_screen_dimensions();
 
 	if(new_screen_size != last_screen_size){
 	
@@ -133,9 +133,8 @@ while(true){
 		last_screen_size = screen_size;
 		screen_size = new_screen_size;	
 
-		print "resize " + screen_size;
 
-		m.flush();
+		window.flush();
 
 
 	
@@ -145,13 +144,13 @@ while(true){
 	//if the frame time is not the desired frame time yet we sleep
 	let remaining = 16 - delta;
 	if (remaining > 0){
-		m.sleep(remaining);
+		window.sleep(remaining);
 	}
 
 
 
 
-	m.new_frame();
+	window.new_frame();
 }
 
 
