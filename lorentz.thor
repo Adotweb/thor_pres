@@ -8,7 +8,6 @@ overload + (a, b){
 
 let window = m.create_window();
 
-print window;
 
 let unit = 0;
 
