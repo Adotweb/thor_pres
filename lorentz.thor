@@ -52,6 +52,9 @@ let z2 = 0;
 let color2 = [0, 255, 0];
 let last_point2 = [x2, y2];
 
+let time = 0;
+let time_step = 0.1;
+
 while(true){
 		
 
@@ -146,13 +149,26 @@ while(true){
 		window.sleep(remaining);
 	}
 
+	time = time + time_step;
 
+
+	color = [
+		127 + 127 * m.sin(time),
+		127 + 127 * m.sin(time - 3.14/3),
+		127 + 127 * m.sin(time - 3.14 * 2/3)
+	];
+
+
+	color2 = [
+		127 + 127 * m.sin(time - 3.14 * 2/3),
+		127 + 127 * m.sin(time - 3.14/3),
+		127 + 127 * m.sin(time - 3.14)
+	];
 
 
 	window.new_frame();
-}
-
-
-while(true){
 
 }
+
+
+
