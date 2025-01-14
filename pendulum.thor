@@ -81,6 +81,5 @@ while (true) {
     time = time + time_step;
 
 
-    color = [127 + 127 * m.sin(time), 127 + 127 * m.sin(time - 3.14/3), 127 + 127 * m.sin(time - 3.14 * 2/3)];
 }
 
