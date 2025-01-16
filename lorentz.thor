@@ -1,6 +1,9 @@
 //import animation library 
 let m = import_lib("mjolnir.so");
 
+let reacthor = import_lib("reacthor.so");
+
+
 
 overload + (a, b){
 	return stringify(a) + stringify(b);
@@ -55,8 +58,14 @@ let last_point2 = [x2, y2];
 let time = 0;
 let time_step = 0.1;
 
+
+let plot_fn = "hello_func";
+
+fn loop(){
+
+
 while(true){
-		
+	print plot_fn;	
 
 	//get time since last frame
 	let delta = window.get_delta_time();
@@ -169,6 +178,11 @@ while(true){
 	window.new_frame();
 
 }
+}
 
 
+reacthor.start_thread(loop);
 
+while(true){
+	plot_fn = get_input("some function to plot?");
+}
