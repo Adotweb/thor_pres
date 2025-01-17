@@ -12,7 +12,7 @@ overload + (a, b){
 
 overload | (a){
 
-	return "return " + a + ";";
+	return "return :" + a + ";";
 }
 
 
