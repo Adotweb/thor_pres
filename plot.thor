@@ -1,76 +1,139 @@
-//import animation library 
-let m = import_lib("mjolnir.so");
+let mjolnir = import_lib("mjolnir.so");
+
+let reacthor = import_lib("reacthor.so");
 
 
 overload + (a, b){
+
 	return stringify(a) + stringify(b);
+
 }
 
-m.create_window();
 
+overload | (a){
 
-let unit = 0;
-
-let screen_size = [10000, 10000];
-
-let last_screen_size = [0, 0];
-
-fn plot_fn(x){
-	return x * x;
+	return "return " + a + ";";
 }
 
-let scale = 1/10;
 
-while(true){
-	//get time since last frame
-	let delta = m.get_delta_time();
+let plot_function = :x -> mjolnir.sin(x);
 
-	let plot_point = [unit, screen_size[1] - plot_fn((unit - screen_size[0]/2) * scale)];
+let plot_functions = [
+	:x -> mjolnir.sin(x)
+];
 
-	if(unit <= screen_size[0]){
-		if(unit >= 0){	
-			m.draw_rect([
-				plot_point, 
-				[plot_point[0] + 1, plot_point[1] + 1]
-			]);
-		}
-	} else {
-			
-			
-		print "done plotting";
+//animation loop function
+//will run in seperate thread so main thread can handle io input;
+
+
+fn clip_to_screen(point, s_w, s_h){
+	return [
+		(point[0] + 1) * s_w/2, 
+		(1 - point[1]) * s_h/2
+	];	
+}
+
+let scale = 3.14;
+
+
+let window = mjolnir.create_window();
+fn animation(){	
+
+	let last_point = [-scale, plot_function(-scale)];
+
+	let last_points = [];
+
+	for pf in plot_functions{
+		last_points.push([-scale, pf(-scale)]);
 	}
 
 
+	let dx = 0.1;	
 
-	unit = unit + 1;
+	let dimensions = window.get_screen_dimensions();
 
+	
+	
+	window.set_color([255, 255, 255]);
 
-	let new_screen_size = m.get_screen_dimensions();
+	let last_plot_fn_len = plot_functions.len();
 
-	if(new_screen_size != last_screen_size){
+	while(true){
+
 		
-		last_screen_size = screen_size;
-		screen_size = new_screen_size;	
+		let new_dimensions = window.get_screen_dimensions();
+		
+		if(plot_functions.len() != last_plot_fn_len){
+			last_plot_fn_len = plot_functions.len();
+				
+			last_points.push([-scale, plot_functions[plot_functions.len() - 1](-scale)]);
 
-		print "resize " + screen_size;
+		}
 
-		m.flush();
-		let unit = 0;
-	}		
+		if(new_dimensions != dimensions){
+			dimensions = new_dimensions;
 
-	//if the frame time is not the desired frame time yet we sleep
-	let remaining = 16 - delta;
-	if (remaining > 0){
-		m.sleep(remaining);
+
+			last_points = [];
+				
+			for pf in plot_functions{
+				last_points.push([
+					-scale, 
+					pf(-scale)
+				]);
+			}
+
+			window.flush();
+		}
+	
+		let delta_time = window.get_delta_time();
+
+		for pf in 0 to plot_functions.len() - 1{
+		
+			let plot_function = plot_functions[pf];
+			let last_point = last_points[pf];
+
+
+			let new_point = [
+				(last_point[0] + dx),
+				plot_function((last_point[0] + dx))
+			];
+				
+			if(new_point[0]*new_point[0] < scale*scale){	
+				window.draw_line([
+					clip_to_screen([last_point[0]/scale, last_point[1]/scale], dimensions[0], dimensions[1]), 
+					clip_to_screen([new_point[0]/scale, new_point[1]/scale], dimensions[0], dimensions[1])
+				]);				
+			}
+
+
+			last_points[pf] = new_point;
+		}
+
+		
+
+
+		let remaining = 16 - delta_time;
+		if(delta_time < 16){
+			window.sleep(remaining);
+		}
+
+		window.new_frame();	
 	}
-
-
-
-
-	m.new_frame();
 }
 
+reacthor.start_thread(animation);
 
 while(true){
+	let tr = try {
+		let new_function = eval(|get_input("new function? (has to have the form :(a) -> f(a))"));
 
+		plot_functions.push(new_function);
+	};
+
+	if(type_of(tr) == "error"){
+		print tr;
+	}else{
+		print "added your function successfully";
+	}
 }
