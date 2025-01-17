@@ -180,9 +180,10 @@ while(true){
 }
 }
 
-
+//video thread
 reacthor.start_thread(loop);
 
+//input thread
 while(true){
 	plot_fn = get_input("some function to plot?");
 }
