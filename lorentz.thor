@@ -61,7 +61,6 @@ let time_step = 0.1;
 
 let plot_fn = "hello_func";
 
-fn loop(){
 
 
 while(true){
@@ -178,12 +177,5 @@ while(true){
 	window.new_frame();
 
 }
-}
 
-//video thread
-reacthor.start_thread(loop);
 
-//input thread
-while(true){
-	plot_fn = get_input("some function to plot?");
-}
